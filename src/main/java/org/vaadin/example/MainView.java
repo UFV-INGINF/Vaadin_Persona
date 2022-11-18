@@ -1,6 +1,7 @@
 package org.vaadin.example;
 
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -16,6 +17,8 @@ import com.vaadin.flow.server.PWA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.backend.Persona;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -101,8 +104,26 @@ public class MainView extends VerticalLayout {
         grid.setItems(people);
 
 
+        TextField characterId = new TextField("Insert Character ID:");
+        characterId.addThemeName("bordered");
+
+        Button send =  new Button("Send",
+                e -> {
+
+                    try {
+                        service.getSWAPI(Integer.parseInt(characterId.getValue()));
+                    } catch (URISyntaxException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+
+
         horizontal1.add(textField2, button2);
-        add(horizontal1, textField, button, grid );
+        add(horizontal1, textField, button, grid, characterId, send );
     }
 
 
